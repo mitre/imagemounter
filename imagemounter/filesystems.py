@@ -221,6 +221,9 @@ class MountFileSystem(MountpointFileSystemMixin, FileSystem):
         # default arguments for calling mount
         if opts and not opts.endswith(','):
             opts += ","
+
+        if volume.size is None:
+            volume.size = 0
         opts += 'loop,offset=' + str(volume.offset) + ',sizelimit=' + str(volume.size)
 
         # building the command
@@ -446,7 +449,7 @@ class Jffs2FileSystem(MountFileSystem):
         _util.check_call_(['mount', '-t', 'jffs2', '/dev/mtdblock0', self.mountpoint])
 
 
-class LuksFileSystem(LoopbackFileSystemMixin, FileSystem):
+class LuksFileSystem(LoopbackFileSystemMixin, MountFileSystem):
     type = 'luks'
     guids = ['CA7D7CCB-63ED-4C53-861C-1742536059CC']
 
@@ -481,6 +484,7 @@ class LuksFileSystem(LoopbackFileSystemMixin, FileSystem):
         # noinspection PyBroadException
         try:
             _util.check_call_(["cryptsetup", "isLuks", self.loopback], stderr=subprocess.STDOUT)
+
             # ret = 0 if isLuks
         except Exception:
             logger.warning("Not a LUKS volume")
