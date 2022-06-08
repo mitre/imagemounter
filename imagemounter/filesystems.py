@@ -505,6 +505,8 @@ class LuksFileSystem(LoopbackFileSystemMixin, MountFileSystem):
                     extra_args = ['--master-key-file', v]
             else:
                 logger.warning("No key material provided for %s", self.volume)
+                # Don't continue attmepting to mount the volume is no key is provided. This can cause the process to freeze.
+                return
         except ValueError:
             logger.exception("Invalid key material provided (%s) for %s. Expecting [arg]:[value]",
                              self.volume.key, self.volume)
