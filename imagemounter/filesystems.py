@@ -627,6 +627,13 @@ class LvmFileSystem(LoopbackFileSystemMixin, FileSystem):
     aliases = ['0x8e', 'lvm2']
     guids = ['E6D6D379-F507-44C2-A23C-238F2A3DF928', '79D3D6E6-07F5-C244-A23C-238F2A3DF928']
 
+    @classmethod
+    def detect(cls, source, description):
+        res = super().detect(source, description)
+        if "LVM" in description:
+            res.update({LvmFileSystem: 100})
+        return res
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.vgname = None
@@ -642,8 +649,8 @@ class LvmFileSystem(LoopbackFileSystemMixin, FileSystem):
         os.environ['LVM_SUPPRESS_FD_WARNINGS'] = '1'
 
         # find free loopback device
-        # No need to find loopback device if using nbd device
-        if "/dev/nbd" not in self.volume.get_raw_path():
+        # No need to find loopback device if using device
+        if "/dev" not in self.volume.get_raw_path():
             self._find_loopback()
         time.sleep(0.2)
 
