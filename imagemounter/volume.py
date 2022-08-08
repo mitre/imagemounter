@@ -572,7 +572,10 @@ class Volume:
             return None
 
         result = None
-        paths = os.listdir(self.mountpoint)
+        try:
+	    paths = os.listdir(self.mountpoint)
+        except Exception:
+	    return None
         if 'grub' in paths:
             result = '/boot'
         elif 'usr' in paths and 'var' in paths and 'root' in paths:

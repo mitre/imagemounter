@@ -216,9 +216,16 @@ class SingleVolumeDetector(VolumeDetector):
             if description:
                 # description is the part after the :, until the first comma
                 volume.info['fsdescription'] = description.split(': ', 1)[1].split(',', 1)[0].strip()
+                set_size = False
                 if 'size' in description:
-                    volume.size = int(re.findall(r'size:? (\d+)', description)[0])
-                else:
+                    matches = re.findall(r'size:? (\d+)', description)
+                    if len(matches) > 0:
+                        try:
+                            volume.size = int(matches[0])
+                            set_size = True
+                        except Exception:
+                            pass
+                if not set_size:
                     volume.size = os.path.getsize(volume_system.parent.get_raw_path())
 
         volume.flag = 'alloc'
