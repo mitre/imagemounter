@@ -666,6 +666,30 @@ class LvmFileSystem(LoopbackFileSystemMixin, FileSystem):
                 logger.warning("Volume is not a volume group. (Searching for %s)", self.loopback)
                 raise IncorrectFilesystemError()
 
+            """
+            Get volume UUID and rename to unique name.
+            Set self.vgname to new name.
+            """
+            # Get UUID of the volume group to rename vg
+            vg_uuid = None
+            result = _util.check_output_(["vgs", "-o", "vg_name,vg_uuid,pv_uuid,pv_name"])
+            for line in result.splitlines():
+                if (self.loopback is not None and self.loopback in line) or self.volume.get_raw_path() in line:
+                    vg_uuid = line.split()[1]
+
+            # Rename the volume group to avoid vg name conflicts
+            if vg_uuid:
+                # TODO: replace with random name to avoid name conflicts
+                new_vg_name = "imagemounter-vg"
+                result = _util.check_output_(["vgrename", vg_uuid, new_vg_name])
+
+            # Scan for updated volume name
+            result = _util.check_output_(["lvm", "pvscan"])
+            for line in result.splitlines():
+                if (self.loopback is not None and self.loopback in line) or self.volume.get_raw_path() in line:
+                    for vg in re.findall(r'VG (\S+)', line):
+                        self.vgname = vg
+
             # Enable lvm volumes
             _util.check_call_(["lvm", "vgchange", "-a", "y", self.vgname], stdout=subprocess.PIPE)
         except Exception:

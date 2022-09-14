@@ -198,7 +198,7 @@ class Disk:
                 except NoNetworkBlockAvailableError:
                     logger.warning("No free network block device found.", exc_info=True)
                     raise
-                cmds.extend([['qemu-nbd', '--read-only', '-c', self._paths['nbd'], self.paths[0]]])
+                cmds.extend([['qemu-nbd', '-c', self._paths['nbd'], self.paths[0]]])
 
             else:
                 raise ArgumentError("Unknown mount method {0}".format(self.disk_mounter))
