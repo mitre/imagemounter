@@ -421,6 +421,11 @@ class VmfsFileSystem(LoopbackFileSystemMixin, MountFileSystem):
         self._find_loopback()
         try:
             _util.check_call_(['vmfs-fuse', self.loopback, self.mountpoint], stdout=subprocess.PIPE)
+            return
+        except Exception:
+            pass
+        try:
+            _util.check_call_(['vmfs6-fuse', self.loopback, self.mountpoint], stdout=subprocess.PIPE)
         except Exception:
             self._free_loopback()
             self._clear_mountpoint()
