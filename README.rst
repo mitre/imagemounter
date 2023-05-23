@@ -2,13 +2,6 @@
 imagemounter
 ============
 
-.. image:: https://github.com/ralphje/imagemounter/actions/workflows/test.yml/badge.svg?branch=master&event=push
-    :target: https://github.com/ralphje/imagemounter/actions/workflows/test.yml
-.. image:: https://codecov.io/gh/ralphje/imagemounter/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/ralphje/imagemounter
-.. image:: https://readthedocs.org/projects/imagemounter/badge/?version=latest
-    :target: http://imagemounter.readthedocs.io/en/latest/?badge=latest
-
 imagemounter is a command-line utility and Python package to ease the mounting and unmounting of EnCase, Affuse, vmdk
 and dd disk images (and other formats supported by supported tools). It supports mounting disk images using xmount (with
 optional RW cache), affuse, ewfmount and vmware-mount; detecting DOS, BSD, Sun, Mac and GPT volume systems; mounting
@@ -64,8 +57,7 @@ contributions include:
 * Documentation improvements
 * Bug reports and reviews of pull requests
 
-We use GitHub to keep track of issues and pull requests. You can always
-`submit an issue <https://github.com/ralphje/imagemounter/issues>`_ when you encounter something out of the ordinary.
 
-Not all combinations of file and volume systems have been tested. If you encounter an issue, please try to change some
-of your arguments first, before creating a new GitHub issue.
+RELEASE STATEMENT
+-----------------
+Approved for Public Release; Distribution Unlimited. Public Release Case Number 22-3208.
