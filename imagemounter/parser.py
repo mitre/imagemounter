@@ -1,11 +1,13 @@
 import logging
 import os
 import tempfile
+import subprocess
 
 import time
 
 from imagemounter.disk import Disk
 from imagemounter.exceptions import NoRootFoundError, ImageMounterError, DiskIndexError
+from imagemounter._util import check_output_
 
 logger = logging.getLogger(__name__)
 
@@ -154,28 +156,55 @@ class ImageParser:
             volumes.extend(disk.get_volumes())
         return volumes
 
+
+    def check_target_busy(self):
+        """Return True if any of the mounted volumes are currently being accessed.
+
+        :rtype: bool"""
+        volumes = list(sorted(self.get_volumes(), key=lambda v: v.mountpoint or "", reverse=True))
+        for v in volumes:
+            if v.mountpoint:
+                try:
+                    output = check_output_(["lsof", v.mountpoint])
+                    if output is not "":
+                        return True
+                except subprocess.CalledProcessError:
+                    pass
+        return False
+
+
     def clean(self, remove_rw=False, allow_lazy=False):
-        """Cleans all volumes of all disks (:func:`Volume.unmount`) and all disks (:func:`Disk.unmount`). Volume errors
-        are ignored, but returns immediately on disk unmount error.
+        """Cleans all volumes of all disks (:func:`Volume.unmount`) and all disks (:func:`Disk.unmount`). Returns True
+        if all volumes and disks could be unmounted.
 
         :param bool remove_rw: indicates whether a read-write cache should be removed
         :param bool allow_lazy: indicates whether lazy unmounting is allowed
         :raises SubsystemError: when one of the underlying commands fails. Some are swallowed.
         :raises CleanupError: when actual cleanup fails. Some are swallowed.
+
+        :rtype: bool
         """
 
         # To ensure clean unmount after reconstruct, we sort across all volumes in all our disks to provide a proper
         # order
+
+        if self.check_target_busy():
+            logger.error("Could not unmount image. Target is busy.")
+            return False
+
         volumes = list(sorted(self.get_volumes(), key=lambda v: v.mountpoint or "", reverse=True))
         for v in volumes:
             try:
                 v.unmount(allow_lazy=allow_lazy)
             except ImageMounterError:
                 logger.error("Error unmounting volume {0}".format(v.mountpoint))
+                return False
 
         # Now just clean the rest.
         for disk in self.disks:
             disk.unmount(remove_rw, allow_lazy=allow_lazy)
+
+        return True
 
     def force_clean(self, remove_rw=False, allow_lazy=False, retries=5, sleep_interval=0.5):
         """Attempts to call the clean method, but will retry automatically if an error is raised. When the attempts
