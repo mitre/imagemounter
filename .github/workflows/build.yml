@@ -2,7 +2,6 @@ name: Imagemounter build
 on: [push]
 jobs:
   build:
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Setup python
