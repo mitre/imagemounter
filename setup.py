@@ -16,7 +16,7 @@ except Exception:
     long_description = None
 
 setup(
-    name='imagemounter',
+    name='imagemounter-mitre',
     version=metadata['version'],
     license='MIT',
     packages=['imagemounter', 'imagemounter.cli'],
