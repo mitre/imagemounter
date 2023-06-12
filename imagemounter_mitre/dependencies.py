@@ -2,8 +2,8 @@
 import subprocess
 from builtins import NotImplementedError
 
-from imagemounter import _util
-from imagemounter.exceptions import PrerequisiteFailedError, CommandNotFoundError, ModuleNotFoundError
+from imagemounter_mitre import _util
+from imagemounter_mitre.exceptions import PrerequisiteFailedError, CommandNotFoundError, ModuleNotFoundError
 import functools
 
 

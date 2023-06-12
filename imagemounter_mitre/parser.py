@@ -4,8 +4,8 @@ import tempfile
 
 import time
 
-from imagemounter.disk import Disk
-from imagemounter.exceptions import NoRootFoundError, ImageMounterError, DiskIndexError
+from imagemounter_mitre.disk import Disk
+from imagemounter_mitre.exceptions import NoRootFoundError, ImageMounterError, DiskIndexError
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ class ImageParser:
         :param args: ignored
         """
 
-        from imagemounter import __version__
+        from imagemounter_mitre import __version__
         logger.debug("imagemounter version %s", __version__)
 
         # Store other arguments

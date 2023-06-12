@@ -1,6 +1,6 @@
 import argparse
 import logging
-from imagemounter import _util, dependencies
+from imagemounter_mitre import _util, dependencies
 
 
 class CheckAction(argparse.Action):

@@ -7,7 +7,7 @@ import os
 import sys
 import locale
 
-from imagemounter.exceptions import SubsystemError, CleanupError, NoNetworkBlockAvailableError
+from imagemounter_mitre.exceptions import SubsystemError, CleanupError, NoNetworkBlockAvailableError
 
 logger = logging.getLogger(__name__)
 encoding = locale.getdefaultlocale()[1]

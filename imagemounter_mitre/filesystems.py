@@ -9,8 +9,8 @@ import sys
 import tempfile
 import time
 
-from imagemounter import _util, VOLUME_SYSTEM_TYPES, dependencies
-from imagemounter.exceptions import UnsupportedFilesystemError, IncorrectFilesystemError, ArgumentError, \
+from imagemounter_mitre import _util, VOLUME_SYSTEM_TYPES, dependencies
+from imagemounter_mitre.exceptions import UnsupportedFilesystemError, IncorrectFilesystemError, ArgumentError, \
     KeyInvalidError, ImageMounterError, SubsystemError, NoLoopbackAvailableError, NoMountpointAvailableError, \
     NoNetworkBlockAvailableError
 
