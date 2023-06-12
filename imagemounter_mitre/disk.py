@@ -7,10 +7,10 @@ import subprocess
 import tempfile
 import time
 
-from imagemounter import _util, BLOCK_SIZE
-from imagemounter.exceptions import ImageMounterError, ArgumentError, MountpointEmptyError, MountError, \
+from imagemounter_mitre import _util, BLOCK_SIZE
+from imagemounter_mitre.exceptions import ImageMounterError, ArgumentError, MountpointEmptyError, MountError, \
     NoNetworkBlockAvailableError, SubsystemError
-from imagemounter.volume_system import VolumeSystem
+from imagemounter_mitre.volume_system import VolumeSystem
 
 logger = logging.getLogger(__name__)
 

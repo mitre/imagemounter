@@ -7,8 +7,8 @@ from collections import defaultdict
 
 import re
 
-from imagemounter import _util, dependencies
-from imagemounter.exceptions import ArgumentError, SubsystemError, ModuleNotFoundError, PrerequisiteFailedError
+from imagemounter_mitre import _util, dependencies
+from imagemounter_mitre.exceptions import ArgumentError, SubsystemError, ModuleNotFoundError, PrerequisiteFailedError
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ class VolumeSystem:
     def _make_subvolume(self, **args):
         """Creates a subvolume, adds it to this class and returns it."""
 
-        from imagemounter.volume import Volume
+        from imagemounter_mitre.volume import Volume
         v = Volume(disk=self.disk, parent=self.parent,
                    volume_detector=self.volume_detector,
                    **args)  # vstype is not passed down, let it decide for itself.

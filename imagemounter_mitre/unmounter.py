@@ -2,7 +2,7 @@ import glob
 import os
 import re
 import tempfile
-from imagemounter import _util
+from imagemounter_mitre import _util
 
 
 class Unmounter:

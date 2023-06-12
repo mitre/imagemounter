@@ -9,10 +9,10 @@ import logging
 import sys
 import os
 
-from imagemounter import _util, ImageParser, Unmounter, __version__, FILE_SYSTEM_TYPES, VOLUME_SYSTEM_TYPES, \
+from imagemounter_mitre import _util, ImageParser, Unmounter, __version__, FILE_SYSTEM_TYPES, VOLUME_SYSTEM_TYPES, \
     DISK_MOUNTERS
-from imagemounter.cli import CheckAction, get_coloring_func, AppendDictAction, ImageMounterStreamHandler
-from imagemounter.exceptions import NoRootFoundError, ImageMounterError, UnsupportedFilesystemError
+from imagemounter_mitre.cli import CheckAction, get_coloring_func, AppendDictAction, ImageMounterStreamHandler
+from imagemounter_mitre.exceptions import NoRootFoundError, ImageMounterError, UnsupportedFilesystemError
 
 
 def main():
@@ -204,7 +204,7 @@ def main():
         args.vshadow = False
 
     if (args.interactive or not args.images) and not args.unmount:
-        from imagemounter.cli.shell import main
+        from imagemounter_mitre.cli.shell import main
         main()
         return
 

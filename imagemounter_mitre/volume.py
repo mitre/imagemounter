@@ -7,10 +7,10 @@ import re
 import threading
 import warnings
 
-from imagemounter import _util, filesystems, FILE_SYSTEM_TYPES, VOLUME_SYSTEM_TYPES, dependencies
-from imagemounter.exceptions import SubsystemError, NotMountedError, ImageMounterError
-from imagemounter.filesystems import FileSystem, CarveFileSystem
-from imagemounter.volume_system import VolumeSystem
+from imagemounter_mitre import _util, filesystems, FILE_SYSTEM_TYPES, VOLUME_SYSTEM_TYPES, dependencies
+from imagemounter_mitre.exceptions import SubsystemError, NotMountedError, ImageMounterError
+from imagemounter_mitre.filesystems import FileSystem, CarveFileSystem
+from imagemounter_mitre.volume_system import VolumeSystem
 
 logger = logging.getLogger(__name__)
 
