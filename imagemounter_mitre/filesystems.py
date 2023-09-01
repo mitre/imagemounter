@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from pathlib import Path
 
 from imagemounter_mitre import _util, VOLUME_SYSTEM_TYPES, dependencies
 from imagemounter_mitre.exceptions import UnsupportedFilesystemError, IncorrectFilesystemError, ArgumentError, \
@@ -50,10 +51,23 @@ class MountpointFileSystemMixin:
             path = os.path.join(md, pretty_label)
 
             # check if path already exists, otherwise try to find another nice path
-            if os.path.exists(path):
+            os_error = False
+            try:
+                Path(path).exists()
+            except OSError:
+                os_error = True
+
+            if os.path.exists(path) or os_error:
                 for i in range(2, 100):
                     path = os.path.join(md, pretty_label + "-" + str(i))
-                    if not os.path.exists(path):
+
+                    try:
+                        Path(path).exists()
+                        os_error = False
+                    except OSError:
+                        os_error = True
+
+                    if not os.path.exists(path) and not os_error:
                         break
                 else:
                     logger.error("Could not find free mountdir.")
