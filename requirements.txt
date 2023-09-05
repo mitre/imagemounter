@@ -1,3 +1,4 @@
+bump2version==1.0.1
 #pytsk3>=0.0.dev0  # allow dev releases
 termcolor
 #python-magic
