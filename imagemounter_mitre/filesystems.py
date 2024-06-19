@@ -339,7 +339,8 @@ class ExtFileSystem(MountFileSystem):
     _mount_opts = 'noexec,noload'
 
 
-class UfsFileSystem(MountFileSystem):
+class UfsFileSystem(LoopbackFileSystemMixin, MountFileSystem):
+
     type = 'ufs'
     aliases = ['4.2bsd', 'ufs2', 'ufs 2']
     # TODO: support for other ufstypes
@@ -353,6 +354,18 @@ class UfsFileSystem(MountFileSystem):
             # as volumesystemtype
             res.update({cls: -20, VolumeSystemFileSystem: 20})
         return res
+
+    def mount(self):
+        try:
+            self._make_mountpoint()
+            self._find_loopback()
+            _util.check_call_(['mount', '-t', 'ufs', '-o', f'ufstype=ufs2,offset={self.volume.parent.offset}',
+                            self.loopback, self.mountpoint], stdout=subprocess.PIPE)
+            return
+        except Exception:
+            self._free_loopback()
+            self._clear_mountpoint()
+            raise
 
 
 class NtfsFileSystem(MountFileSystem):
