@@ -42,7 +42,7 @@ use this package for volume detection.
 Just perform the following commands for a basic installation::
 
     apt-get install xmount ewf-tools afflib-tools sleuthkit
-    pip3 install imagemounter
+    pip3 install imagemounter-mitre
     imount --check
 
 Use ``imount --check`` to verify which packages are (not) installed. Install additional packages as needed.
