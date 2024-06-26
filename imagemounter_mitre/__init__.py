@@ -1,5 +1,5 @@
 __ALL__ = ['Volume', 'VolumeSystem', 'Disk', 'ImageParser', 'Unmounter']
-__version__ = '2023.9.5'
+__version__ = '2024.6.26'
 
 BLOCK_SIZE = 512
 DISK_MOUNTERS = ('xmount', 'affuse', 'ewfmount', 'vmware-mount', 'avfs', 'qemu-nbd', 'auto', 'dummy')
