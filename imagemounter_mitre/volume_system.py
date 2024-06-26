@@ -452,12 +452,17 @@ class MmlsVolumeDetector(VolumeDetector):
                 if len(values) > 5:
                     description = values[5]
 
-                volume = volume_system._make_subvolume(
-                    index=self._format_index(volume_system, int(index[:-1])),
-                    offset=int(start) * volume_system.disk.block_size,
-                    size=int(length) * volume_system.disk.block_size
-                )
-                volume.info['fsdescription'] = description
+                index = self._format_index(volume_system, int(index[:-1]))
+                volume = None
+                if index.count('.') < 2:
+                    volume = volume_system._make_subvolume(
+                        index=index,
+                        offset=int(start) * volume_system.disk.block_size,
+                        size=int(length) * volume_system.disk.block_size
+                    )
+                    volume.info['fsdescription'] = description
+                else:
+                    continue
             except Exception:
                 logger.exception("Error while parsing mmls output")
                 continue
