@@ -123,3 +123,8 @@ class SubsystemError(ImageMounterError):
 class CleanupError(ImageMounterError):
     """Raised by the unmounter when cleaning failed."""
     pass
+
+class DuplicateVolumeGroupError(ImageMounterError):
+    """Raised when the mounted volume group name already exists."""
+    def __init__(self, msg):
+        super().__init__(msg)

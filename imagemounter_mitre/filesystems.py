@@ -13,7 +13,7 @@ from pathlib import Path
 from imagemounter_mitre import _util, VOLUME_SYSTEM_TYPES, dependencies
 from imagemounter_mitre.exceptions import UnsupportedFilesystemError, IncorrectFilesystemError, ArgumentError, \
     KeyInvalidError, ImageMounterError, SubsystemError, NoLoopbackAvailableError, NoMountpointAvailableError, \
-    NoNetworkBlockAvailableError
+    NoNetworkBlockAvailableError, DuplicateVolumeGroupError
 
 logger = logging.getLogger(__name__)
 
@@ -688,8 +688,9 @@ class LvmFileSystem(LoopbackFileSystemMixin, FileSystem):
 
         try:
             # Scan for new lvm volumes
-            result = _util.check_output_(["lvm", "pvscan"])
-            for line in result.splitlines():
+            result = _util.check_output_(["lvm", "pvscan"], stderr=subprocess.STDOUT)
+            lines  = result.splitlines()
+            for line in lines:
                 if (self.loopback is not None and self.loopback in line) or self.volume.get_raw_path() in line:
                     for vg in re.findall(r'VG (\S+)', line):
                         self.vgname = vg
@@ -699,11 +700,14 @@ class LvmFileSystem(LoopbackFileSystemMixin, FileSystem):
                 raise IncorrectFilesystemError()
 
             # Enable lvm volumes
-            _util.check_call_(["lvm", "vgchange", "-a", "y", self.vgname], stdout=subprocess.PIPE)
-        except Exception:
+            try:
+                _util.check_call_(["lvm", "vgchange", "-a", "y", self.vgname], stdout=subprocess.PIPE)
+            except Exception:
+                raise DuplicateVolumeGroupError(self.vgname)
+        except Exception as e:
             self._free_loopback()
             self.vgname = None
-            raise
+            raise e
 
         self.volume.info['volume_group'] = self.vgname
         self.volume.volumes.vstype = 'lvm'
