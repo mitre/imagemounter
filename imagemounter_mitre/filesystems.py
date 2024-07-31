@@ -688,9 +688,8 @@ class LvmFileSystem(LoopbackFileSystemMixin, FileSystem):
 
         try:
             # Scan for new lvm volumes
-            result = _util.check_output_(["lvm", "pvscan"], stderr=subprocess.STDOUT)
-            lines  = result.splitlines()
-            for line in lines:
+            result = _util.check_output_(["lvm", "pvscan"])
+            for line in result.splitlines():
                 if (self.loopback is not None and self.loopback in line) or self.volume.get_raw_path() in line:
                     for vg in re.findall(r'VG (\S+)', line):
                         self.vgname = vg

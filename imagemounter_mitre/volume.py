@@ -57,7 +57,6 @@ class Volume:
 
         self._get_fstype_from_parser(fstype)
 
-        # LVM debugging
         self.duplicate_volume_group = False
         self.vgname = ""
 
