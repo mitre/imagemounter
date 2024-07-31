@@ -5,6 +5,13 @@ We try to reduce backwards compatibility breakage only to major version releases
 
 Release history
 ~~~~~~~~~~~~~~~
+
+2024.7.31
+---------
+New features:
+
+* Detect duplicate lvm volume group names and raise error with volume group information.
+
 4.0.0 (unreleased)
 ------------------
 This release contains some major improvements in the API of imagemounter, making large if-statements obsolete and
