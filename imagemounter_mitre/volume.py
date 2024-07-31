@@ -8,7 +8,7 @@ import threading
 import warnings
 
 from imagemounter_mitre import _util, filesystems, FILE_SYSTEM_TYPES, VOLUME_SYSTEM_TYPES, dependencies
-from imagemounter_mitre.exceptions import SubsystemError, NotMountedError, ImageMounterError
+from imagemounter_mitre.exceptions import SubsystemError, NotMountedError, ImageMounterError, DuplicateVolumeGroupError
 from imagemounter_mitre.filesystems import FileSystem, CarveFileSystem
 from imagemounter_mitre.volume_system import VolumeSystem
 
@@ -56,6 +56,9 @@ class Volume:
         self.volumes = VolumeSystem(parent=self, vstype=vstype, volume_detector=volume_detector)
 
         self._get_fstype_from_parser(fstype)
+
+        self.duplicate_volume_group = False
+        self.vgname = ""
 
         if key:
             self.key = key
@@ -459,6 +462,10 @@ class Volume:
             logger.exception("Execution failed due to {} {}".format(type(e), e), exc_info=True)
             if not isinstance(e, ImageMounterError):
                 raise SubsystemError(e)
+            elif isinstance(e, DuplicateVolumeGroupError):
+                self.duplicate_volume_group = True
+                self.vgname = str(e)
+                raise
             else:
                 raise
 
