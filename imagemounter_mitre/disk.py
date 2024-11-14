@@ -305,7 +305,7 @@ class Disk:
                 logger.info("Detecting as single volume instead")
                 yield from self.volumes.detect_volumes(method='single', force=True)
 
-    def init(self, single=None, only_mount=None, skip_mount=None, swallow_exceptions=True):
+    def init(self, single=None, only_mount=None, skip_mount=None, swallow_exceptions=True,imount=False):
         """Calls several methods required to perform a full initialisation: :func:`mount`, and
         :func:`mount_volumes` and yields all detected volumes.
 
@@ -321,9 +321,9 @@ class Disk:
         self.volumes.preload_volume_data()
 
         yield from self.init_volumes(single, only_mount=only_mount, skip_mount=skip_mount,
-                                     swallow_exceptions=swallow_exceptions)
+                                     swallow_exceptions=swallow_exceptions, imount=imount)
 
-    def init_volumes(self, single=None, only_mount=None, skip_mount=None, swallow_exceptions=True):
+    def init_volumes(self, single=None, only_mount=None, skip_mount=None, swallow_exceptions=True, imount=False):
         """Generator that detects and mounts all volumes in the disk.
 
         :param single: If *single* is :const:`True`, this method will call :Func:`init_single_volumes`.
@@ -337,7 +337,7 @@ class Disk:
 
         for volume in self.detect_volumes(single=single):
             yield from volume.init(only_mount=only_mount, skip_mount=skip_mount,
-                                   swallow_exceptions=swallow_exceptions)
+                                   swallow_exceptions=swallow_exceptions,imount=imount)
 
     def get_volumes(self):
         """Gets a list of all volumes in this disk, including volumes that are contained in other volumes."""

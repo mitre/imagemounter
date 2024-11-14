@@ -274,7 +274,7 @@ def main():
             sys.stdout.flush()
             has_left_mounted = False
 
-            for volume in p.init_volumes(args.single, args.only_mount, args.skip, swallow_exceptions=True):
+            for volume in p.init_volumes(args.single, args.only_mount, args.skip, swallow_exceptions=True, imount=True):
                 try:
                     # something failed?
                     if not volume.mountpoint and not volume.loopback:

@@ -380,6 +380,15 @@ class NtfsFileSystem(MountFileSystem):
             # if there is also ntfs in it, it is more likely to be ntfs
         return res
 
+    def mount(self):
+        super().mount()
+        if not self.volume.imount:
+            try:
+                for v in self.volume.detect_volume_shadow_copies():
+                    v.init_volume()
+            except Exception as e:
+                pass
+
 
 class ExfatFileSystem(MountFileSystem):
     type = 'exfat'
