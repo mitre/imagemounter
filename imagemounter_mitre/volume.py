@@ -308,7 +308,7 @@ class Volume:
              and self.info.get('label') not in skip_mount)
         return om and sm
 
-    def init(self, only_mount=None, skip_mount=None, swallow_exceptions=True):
+    def init(self, only_mount=None, skip_mount=None, swallow_exceptions=True, imount=False):
         """Generator that mounts this volume and either yields itself or recursively generates its subvolumes.
 
         More specifically, this function will call :func:`load_fsstat_data` (iff *no_stats* is False), followed by
@@ -328,7 +328,7 @@ class Volume:
                 yield self
                 return
 
-            if not self.init_volume():
+            if not self.init_volume(imount=imount):
                 yield self
                 return
 
@@ -342,9 +342,9 @@ class Volume:
             yield self
         else:
             for v in self.volumes:
-                yield from v.init(only_mount, skip_mount, swallow_exceptions)
+                yield from v.init(only_mount, skip_mount, swallow_exceptions, imount=imount)
 
-    def init_volume(self):
+    def init_volume(self, imount=False):
         """Initializes a single volume. You should use this method instead of :func:`mount` if you want some sane checks
         before mounting.
         """
@@ -366,6 +366,7 @@ class Volume:
             return False
 
         logger.info("Mounting volume {0}".format(self))
+        self.imount = imount
         self.mount()
         self.detect_mountpoint()
 

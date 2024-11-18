@@ -501,6 +501,8 @@ class VssVolumeDetector(VolumeDetector):
                                                volume_system.parent.get_raw_path()])
         except Exception as e:
             logger.exception("Failed obtaining info from the volume shadow copies.")
+            volume_system.parent.filesystem.unmount()
+            volume_system.parent.filesystem._clear_mountpoint()
             raise SubsystemError(e)
 
         current_store = None
