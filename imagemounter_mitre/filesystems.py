@@ -382,7 +382,7 @@ class NtfsFileSystem(MountFileSystem):
 
     def mount(self):
         super().mount()
-        if not self.volume.imount:
+        if ((not self.volume.imount) and self.volume.parent == self.volume.disk):
             try:
                 for v in self.volume.detect_volume_shadow_copies():
                     v.init_volume()
