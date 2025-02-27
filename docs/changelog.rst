@@ -6,6 +6,10 @@ We try to reduce backwards compatibility breakage only to major version releases
 Release history
 ~~~~~~~~~~~~~~~
 
+2025.02.27
+----------
+* Fix error causing vss checks to enter a loop
+
 2024.7.31
 ---------
 New features:
